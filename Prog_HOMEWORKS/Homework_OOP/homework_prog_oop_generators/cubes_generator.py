@@ -13,5 +13,3 @@ def cubes_generator(stop: int):
             break
         yield number ** 3
         number += 1
-
-print(list(cubes_generator(150)))

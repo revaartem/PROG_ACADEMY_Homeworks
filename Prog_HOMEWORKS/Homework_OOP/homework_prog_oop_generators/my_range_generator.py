@@ -15,7 +15,3 @@ def my_range(start: int, stop: int, step: int = 1):
             break
         yield number
         number += step
-
-
-print(list(range(0,100,5)))
-print(list(my_range(0, 100, 5)))

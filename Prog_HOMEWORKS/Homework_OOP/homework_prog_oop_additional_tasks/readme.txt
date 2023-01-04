@@ -11,6 +11,8 @@ depends on the day of week. Having a pizza-of-the-day simplifies ordering for cu
 They don't have to be experts on specific types of pizza. Also, customers can add extra
 ingredients to the pizza-of-the-day. Write a program that will form orders from customers.
 
+.task_2
+
 3. Write a program for selling tickets to IT-events. Each ticket has a unique number and a price.
 There are four types of tickets: regular ticket, advance ticket (purchased 60 or more days before
 the event), late ticket (purchased fewer than 10 days before the event) and student ticket.
