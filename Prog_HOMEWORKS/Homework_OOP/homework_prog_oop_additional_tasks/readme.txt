@@ -17,6 +17,8 @@ ingredients to the pizza-of-the-day. Write a program that will form orders from 
 There are four types of tickets: regular ticket, advance ticket (purchased 60 or more days before
 the event), late ticket (purchased fewer than 10 days before the event) and student ticket.
 
+.task_3
+
 Additional information:
 -advance ticket - discount 40% of the regular ticket price;
 -student ticket - discount 50% of the regular ticket price;

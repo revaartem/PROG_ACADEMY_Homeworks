@@ -13,4 +13,4 @@ if __name__ == "__main__":
     order_1.add_to_order('thursday', 8, 3, 2, 4)
     order_1.add_to_order('friday', 11, 3, 2, 4)
     print(order_1)
-
+    # print(main_pizzeria)

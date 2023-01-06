@@ -18,10 +18,14 @@ class MarketPlace:
         """
         self.name_of_market = name
         self.events_earnings_and_serial = {}
-        # json.dump({}, open(f'{market.name_of_market} sold tickets.json', 'w'), indent=4)
+        json.dump({}, open(f'{self.name_of_market} sold tickets.json', 'w'), indent=4)
 
     def __str__(self):
-        pass
+        res = '\n'.join(key.name for key in self.events_earnings_and_serial)
+        return f'''
+Name of market-place - {self.name_of_market}
+Events:
+{res}'''
 
     def serial_number_generator(self, _event: event.Event):
         """
@@ -55,18 +59,40 @@ class MarketPlace:
         self.events_earnings_and_serial[_event] = {
             'available': {
                 'earnings': 0,
-                'serial': self.serial_number_generator(_event)
+                'serial': self.serial_number_generator(_event),
+                          },
+            'sold': {
+
             }
         }
-        json.dump(self.events_earnings_and_serial[_event]['available']['serial'],
-                  open(f'{_event.name}_serial.json', 'w', ), indent=4)
+        json.dump(self.events_earnings_and_serial[_event]['available']['serial'],  # Creates .json file with all
+                  open(f'{_event.name}_serial.json', 'w', ), indent=4)             # serial numbers of the tickets
+        base_of_events = json.load(open(f'{self.name_of_market} sold tickets.json'))
+        base_of_events[_event.name] = {'sold': {}}
+        json.dump(base_of_events, open(f'{self.name_of_market} sold tickets.json', 'w'), indent=4)
+        # Creates .json file to put in it serial numbers, which have been sold
 
     def sell_ticket(self, customer_: customer.Customer, event_: event.Event, quantity_of_tickets: int):
-        list_of_tickets = []
-        json_database_of_sold_tickets = json.load(open(f'{market.name_of_market} sold tickets.json'))
+        """
+        Sells tickets to customer. When function finished work, tickets will be already in
+        <name of customer>.customer_tickets.
+
+        :param customer_: Instance class Customer.
+        :param event_: Instance class Event.
+        :param quantity_of_tickets: Quantity of tickets, that customer want to buy.
+        :return: Error if quantity of tickets is greater than available seats or if student try to buy more
+                than 1 ticket per operation.
+        """
+        if quantity_of_tickets > len(self.events_earnings_and_serial[event_]['available']['serial']):
+            raise ValueError (f"On this event left only "
+                              f"{len(self.events_earnings_and_serial[event_]['available']['serial'])} places.")
         ticket_type = self.ticket_type(event_, customer_)
         if ticket_type == 'student' and quantity_of_tickets > 1:
-            raise ValueError ('Customer in student status can buy only 1 ticket per operation.')
+            raise ValueError('Customer in student status can buy only 1 ticket per operation.')
+
+        list_of_tickets = []
+        json_database_of_sold_tickets = json.load(open(f'{self.name_of_market} sold tickets.json'))
+
         price = event_.price
         if ticket_type == 'student':
             price *= 0.5
@@ -74,30 +100,44 @@ class MarketPlace:
             price *= 0.6
         if ticket_type == 'late':
             price *= 1.1
+
+            # In this operation we extract serial number, delete them from available directory and
+            # place to 'sold' directory. Creating duplicate information about sold tickets in .json
+            # file.
         for ticket_ in range(0, quantity_of_tickets):
             serial_number = self.events_earnings_and_serial[event_]['available']['serial'][0]
             self.events_earnings_and_serial[event_]['available']['serial'].remove(serial_number)
             self.events_earnings_and_serial[event_]['available']['earnings'] += price
-            json_database_of_sold_tickets[event_.name]['sold'] = {
-                serial_number: {
-                    'type': ticket_type,
-                    'price': price,
-                    'sale time': str(datetime.datetime.now())[:-7]
-                }
+
+            json_database_of_sold_tickets[event_.name]['sold'][serial_number] = {
+                'type': ticket_type,
+                'price': price,
+                'sale time': str(datetime.datetime.now())[:-7]
             }
-            self.events_earnings_and_serial[event_]['sold'] = {
-                serial_number: {
-                    'type': ticket_type,
-                    'price': price,
-                    'sale time': str(datetime.datetime.now())[:-7]
-                }
+
+            self.events_earnings_and_serial[event_]['sold'][serial_number] = {
+                'type': ticket_type,
+                'price': price,
+                'sale time': str(datetime.datetime.now())[:-7]
             }
+            # Creating new instance class Ticket.
             new_ticket = ticket.Ticket(event_, serial_number, price, ticket_type, str(datetime.datetime.now())[:-7])
             list_of_tickets.append(new_ticket)
-            json.dump(json_database_of_sold_tickets, open(f'{market.name_of_market} sold tickets.json', 'w'), indent=4)
+        event_.reduce_places_quantity(quantity_of_tickets)
+
+        # Add to .json file all sold tickets serial numbers.
+        json.dump(json_database_of_sold_tickets, open(f'{self.name_of_market} sold tickets.json', 'w'), indent=4)
+
+        # Put purchased tickets to customers 'ticket wallet'.
         customer_.add_to_customer_tickets(list_of_tickets)
 
     def ticket_type(self, event_: event.Event, customer_: customer.Customer):
+        """
+
+        :param event_: Instance class Event.
+        :param customer_: Instance class Customer.
+        :return: Type of ticket.
+        """
         difference = event_.date - datetime.datetime.now()
         if difference.days < 10:
             return 'late'
@@ -108,42 +148,12 @@ class MarketPlace:
         if difference.days > 9:
             return 'regular'
 
+    def information_about_ticket(self, ticket_: ticket.Ticket):
+        """
 
-
-
-# self.events_earnings_and_serial = {
-#     event: {
-#         'available': {
-#                     'earnings': 15135,
-#                     'serial': []
-#                     },
-#         'sold': {
-#                 'AWD666000005': {
-#                                 'type': 'student',
-#                                 'price': 750,
-#                                 'sale time': '15.47'
-#                                 }
-#                 }
-#     }
-# }
-#
-
-
-
-
-
-
-
-
-
-
-
-
-
-party = event.Event('Atlas Weekend', (2023, 6, 1), '15:00', 'Kyiv, VDNG', 1500, 500)
-market = MarketPlace('Rozetka')
-market.add_new_event(party)
-customer = customer.Customer(False)
-market.sell_ticket(customer, party, 145)
-for t in customer.customer_tickets:
-    print(t)
+        :param ticket_: Instance class Ticket.
+        :return: Information about ticket in dict.
+        """
+        base: dict = json.load(open(f'{self.name_of_market} sold tickets.json'))
+        information = base.get(ticket_.name, -1)['sold'][ticket_.serial_number]
+        return information

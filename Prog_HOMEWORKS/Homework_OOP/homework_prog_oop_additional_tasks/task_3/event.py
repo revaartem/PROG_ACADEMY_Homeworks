@@ -22,30 +22,18 @@ class Event:
         self.time = time
         self.location = location
         self.price = price
-        self.cash_desk = 0
-        self.quantity_and_types_of_sold_tickets = {
-            'regular': 0,
-            'advance': 0,
-            'late': 0,
-            'student': 0,
-        }
         self.quantity_of_seats = quantity_of_seats
         self.available_seats = self.quantity_of_seats
 
     def __str__(self):
-        res = '\n'.join(f'{key} - {value}' for key, value in self.quantity_and_types_of_sold_tickets.items())
         return f"""
 Event name - {self.name}
-Event date - {self.date}
+Event date - {str(self.date)[:-9]}
 Event time - {self.time}
 Event location - {self.location}
 Price of 1 regular ticket - {self.price}
 Number of seats - {self.quantity_of_seats}
 Available seats - {self.available_seats}
-
-Cash desk - {self.cash_desk}$
-Quantity and types of tickets sold:
-{res}
 """
 
     def reduce_places_quantity(self, quantity: int):

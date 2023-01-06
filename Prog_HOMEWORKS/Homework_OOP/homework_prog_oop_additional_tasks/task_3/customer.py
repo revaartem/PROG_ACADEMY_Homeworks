@@ -17,7 +17,7 @@ class Customer:
         self.customer_tickets = []
 
     def __str__(self):
-        res = '\n'.join(self.customer_tickets)
+        res = '\n'.join(map(str, self.customer_tickets))
         return f"""
 Student status - {self.student_status}
 {res}"""

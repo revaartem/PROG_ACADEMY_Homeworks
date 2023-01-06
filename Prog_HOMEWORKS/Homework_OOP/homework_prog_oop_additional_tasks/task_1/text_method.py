@@ -17,7 +17,7 @@ class TextMethods:
         :return: Quantity of characters in file.
         """
         res = 0
-        with open(self.file_name, 'r') as file:
+        with open(self.file_name, mode='r') as file:
             for line in file:
                 res += len(line)
         return res

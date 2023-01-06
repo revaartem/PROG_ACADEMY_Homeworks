@@ -27,7 +27,7 @@ class Order:
         self.order = {}
         self.jokes = []
 
-        with open('jokes.txt') as source:
+        with open('jokes.txt', encoding='utf-8') as source:
             for joke in source:
                 self.jokes.append(joke.strip())
 
