@@ -8,10 +8,21 @@ def my_range(start: int, stop: int, step: int = 1):
     :param step: Add this number to each previous number in sequence.
     :return: Processed number.
     """
-    number = start
+    if not isinstance(start, int):
+        raise TypeError
+    if not isinstance(stop, int):
+        raise TypeError
+    if not isinstance(step, int):
+        raise TypeError
 
-    while True:
-        if number >= stop:
-            break
-        yield number
-        number += step
+    if not step:
+        raise ValueError
+
+    if step < 0 and stop > start:
+        return
+    if step > 0 and stop < start:
+        return
+
+    while abs(start) < abs(stop):
+        yield start
+        start += step
