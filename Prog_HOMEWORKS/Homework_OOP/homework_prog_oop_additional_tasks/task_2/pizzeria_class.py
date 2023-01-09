@@ -6,6 +6,7 @@ class Pizzeria:
     Instance class Pizzeria have Name and menu list. Menu list can be filled from
     .txt file automatically or manually.
     """
+    days_of_week = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 
     def __init__(self, name: str):
         """
@@ -15,7 +16,7 @@ class Pizzeria:
         self.name = name
         self.pizza_menu = {}
         self.pizza_menu_creator()
-        self.days_of_week = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+
 
     def __str__(self):
         """
@@ -45,7 +46,6 @@ Here is our pizza-of-the-day offer:
 
         :return: Raises error if the source file have too much strings inside.
         """
-        days_of_week = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
         index = 0
 
         with open('pizzas.txt') as source:
@@ -53,7 +53,7 @@ Here is our pizza-of-the-day offer:
                 if index < 7:
                     data = pizza.strip().split(sep='| ')
                     new_pizza = pizza_class.Pizza(data[0], data[1], data[2])
-                    self.pizza_menu[days_of_week[index]] = new_pizza
+                    self.pizza_menu[self.days_of_week[index]] = new_pizza
                     index += 1
                 else:
                     raise ValueError ('There is only 7 days in the week, сut your pizzas.txt list down to 7')
