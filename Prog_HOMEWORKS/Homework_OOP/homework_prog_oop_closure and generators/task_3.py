@@ -10,6 +10,8 @@ def sum_func(func: Callable[[int], int]):
     :param func: Function to process the list.
     :return: Sum of processed list.
     """
+    if not isinstance(func, Callable):
+        raise TypeError
     numbers = list(range(1, 11))
 
     processed_numbers = []

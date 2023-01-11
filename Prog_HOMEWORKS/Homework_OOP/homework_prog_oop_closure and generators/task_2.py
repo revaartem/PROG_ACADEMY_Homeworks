@@ -17,6 +17,9 @@ def memoiz_fibonacci():
         :param n: Sequence number.
         :return: Number from sequence.
         """
+        if not isinstance(n, int):
+            raise TypeError
+
         if n < len(result):
             return result[n]
 
@@ -38,6 +41,9 @@ def fibonacci_classic(num: int):
     :param num: Sequence number.
     :return: Number from sequence.
     """
+    if not isinstance(num, int):
+        raise TypeError
+
     if num in (1, 2):
         return 1
     return fibonacci_classic(num - 1) + fibonacci_classic(num - 2)

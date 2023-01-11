@@ -1,3 +1,6 @@
+from typing import Callable
+
+
 def mult_by_2(num: int):
     """
     Multiples number by 2.
@@ -5,6 +8,8 @@ def mult_by_2(num: int):
     :param num: Number to process.
     :return: Number * 2.
     """
+    if not isinstance(num, int):
+        raise TypeError
     num *= 2
     return num
 
@@ -16,6 +21,8 @@ def cubes(num: int):
     :param num: Number to process.
     :return: Number ** 3.
     """
+    if not isinstance(num, int):
+        raise TypeError
     num **= 3
     return num
 
@@ -27,11 +34,13 @@ def squares(num: int):
     :param num: Number to process.
     :return: Number ** 2.
     """
+    if not isinstance(num, int):
+        raise TypeError
     num **= 2
     return num
 
 
-def generator(func, *args: int):
+def generator(func: Callable, *args: int):
     """
     Generate numbers according to given function.
 
@@ -41,6 +50,8 @@ def generator(func, *args: int):
     :param args: Arguments for function. 1st argument - Start (default = 1), 2nd - Stop. 3 or more arguments - Error.
     :return: Number of sequence.
     """
+    if not isinstance(func, Callable):
+        raise TypeError
     if len(args) == 1:
         if not isinstance(*args, int):
             raise TypeError
