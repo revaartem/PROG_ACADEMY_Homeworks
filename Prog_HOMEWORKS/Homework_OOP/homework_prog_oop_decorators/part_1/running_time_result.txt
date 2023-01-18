@@ -1,0 +1,2 @@
+cubes 0.121206 sec
+cubes 0.120720 sec
